@@ -1,0 +1,54 @@
+http://localhost:4000/graphql
+
+http://localhost:4000/graphql/graphiql
+
+extending when the project scales / not needed for this small task since we just need data for one table
+
+usuall we file structure schemas/resolvers and we extend 
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # RESOLVERS #
+
+Resolver is a collection of functions that generate response for a GraphQL query. In simple terms, a resolver acts as a GraphQL query handler.
+Every resolver function in a GraphQL schema accepts four positional arguments as given below − fieldName:(root, args, context, info) => { result }
+
+ A resolver is a function that's responsible for populating the data for a single field in your schema.
+It can populate that data in any way you define, such as by fetching data from a back-end database or a third-party API.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    # SCHEMA #
+
+Your GraphQL server uses a schema to describe the shape of your available data. This schema defines a hierarchy of types with fields that are populated from your back-end data stores.
+ The schema also specifies exactly which queries and mutations are available for clients to execute.
+
+
+ ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ ###What are the three types of operations in GraphQL?
+
+There are three types of operations that GraphQL models:
+
+1_ query – a read‐only fetch.
+2_ mutation – a write followed by a fetch.
+3_ subscription – a long‐lived request that fetches data in response to source events.
+
+
+------------------
+
+Sequelize related
+
+after installing sequelize and sequelize-clie we run the command
+  npx sequelize init 
+to initilize sequelize and create the boiler plate files and folders
+
+
+
+ npx sequelize-cli model:generate --name Users --attributes id:integer ,name:string,email:string,role:integer,date:string
+
+ to create basic boiler plate(model and migration) for the data that we are going to seed and save in sqlite3
+
+ we create seed file for our model
+ npx sequelize-cli seed:generate --name Users
+
+ to seed data into the db use this command
+sequelize db:seed:all
