@@ -51,4 +51,5 @@ to initilize sequelize and create the boiler plate files and folders
  npx sequelize-cli seed:generate --name Users
 
  to seed data into the db use this command
+ 
 sequelize db:seed:all

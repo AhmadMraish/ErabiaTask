@@ -7,8 +7,8 @@ module.exports = {
       [
         {
           id: 1,
-          name: "Eadie Mahmoud",
-          email: "asd1@gmail.com",
+          name: "Admin",
+          email: "admin@gmail.com",
           role: 1,
           date: "2020-08-15T20:52:01.000Z",
         },

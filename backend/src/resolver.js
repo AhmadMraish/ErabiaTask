@@ -1,6 +1,14 @@
+const { sequelize, Users } = require("../models/index");
+
 const resolvers = {
   Query: {
-    async allUsers(root) {},
+    // async allUsers(root) {},
+
+    // a query that returns all users
+    async allUsers(root, args, context) {
+      const users = await Users.findAll();
+      return users;
+    },
   },
 
   Mutation: {
@@ -13,3 +21,5 @@ const resolvers = {
 // users: async (parent, args, { models }) => {
 //     return await models.User.findAll();
 // }
+
+module.exports = resolvers;
