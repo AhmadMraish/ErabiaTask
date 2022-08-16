@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 // I need to learn if there are missing options and configurations that should be added
 // I also learned that apollo is reactive on its own and has its own cache
 // Also learned that you can file structure add queries import them etc...
+// No need to refactor index page, we already know how to query and fetch data both ways
 
 const tabledata = {
   namespace: true,
@@ -33,7 +34,7 @@ const tabledata = {
           `,
         })
         .then(({ data }) => {
-          console.log('test test', data)
+          console.log('data coming from the store', data)
           // context.commit('setTableData', data.getTableData)
         })
         .catch((error) => {
