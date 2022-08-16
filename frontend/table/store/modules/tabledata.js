@@ -1,6 +1,9 @@
 import gql from 'graphql-tag'
-// i am unable to acccess the .query property of the gql tag
-// need to find solution, but its working outside of the vuex module
+
+// found temporary solution for not being able to query with this.$apollo.query
+// I need to learn if there are missing options and configurations that should be added
+// I also learned that apollo is reactive on its own and has its own cache
+// Also learned that you can file structure add queries import them etc...
 
 const tabledata = {
   namespace: true,
@@ -17,7 +20,8 @@ const tabledata = {
 
   actions: {
     async getTableData(context) {
-      await this.$apollo
+      // await this.$apollo
+      await this.app.apolloProvider.defaultClient
         .query({
           query: gql`
             query allUsers {
@@ -29,7 +33,7 @@ const tabledata = {
           `,
         })
         .then(({ data }) => {
-          console.log(data)
+          console.log('test test', data)
           // context.commit('setTableData', data.getTableData)
         })
         .catch((error) => {

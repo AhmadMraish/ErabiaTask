@@ -72,7 +72,8 @@ export default {
     },
   },
   mounted() {
-    // this.getDataforTable()     // this is not working due to problem in query inside store with graphql not accessing query
+    // this is not working due to problem in query inside store with graphql not accessing query
+    this.getDataforTable()
     console.log('mounted')
     this.testData()
   },
