@@ -16,9 +16,9 @@
         <tr v-for="(user, index) in users" :key="index">
           <td>{{ user.id }}</td>
           <td>{{ user.name }}</td>
-          <td>{{ user.email }}</td>
+          <td class="td-width">{{ user.email }}</td>
           <td>{{ user.role }}</td>
-          <td>{{ user.date }}</td>
+          <td class="td-width">{{ user.date }}</td>
         </tr>
       </tbody>
     </table>
@@ -203,12 +203,15 @@ export default {
     border: 1px solid black;
     tr {
       border: 0.5px solid black;
+      .td-width {
+        width: 250px;
+      }
       td {
         padding: 5px 5px;
-        // border: 1px solid black;
         width: fit-content;
         padding-left: 5px;
         padding-right: 10px;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
       }
     }
   }
