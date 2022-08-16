@@ -1,9 +1,10 @@
 <template>
   <div>
+    <p class="sortStatus">{{ this.sortStatus }}</p>
     <table class="tContainer">
       <thead class="theadContainer">
-        <tr>
-          <th>ID</th>
+        <tr class="theadRow">
+          <th :class="{ asc, desc }" @click="sortByid()">ID</th>
           <th>Name</th>
           <th>Email</th>
           <th>Role</th>
@@ -25,20 +26,53 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import gql from 'graphql-tag'
 
 export default {
   name: 'IndexPage',
+
+  // props: {
+  //   asc: {
+  //     type: Boolean,
+  //     default: true,
+  //   },
+  //   desc: {
+  //     type: Boolean,
+  //     default: false,
+  //   },
+  // },
   data: () => ({
-    message: 'Hello World',
+    oldUsers: [],
     users: [],
+    manipulatedArray: [],
+    sorted: 1,
+    sortStatus: 'asc',
   }),
   computed: {
     ...mapGetters(['getterTableData']),
+
+    asc: {
+      get() {
+        return this.sorted === 1 ? true : false
+      },
+      set(value) {
+        this.sorted = value === true ? 1 : 2
+        // console.log(asc)
+      },
+    },
+    desc: {
+      get() {
+        return this.sorted === 2 ? true : false
+      },
+      set(value) {
+        this.sorted = value === true ? 2 : 1
+        // console.log(desc)
+      },
+    },
   },
   mounted() {
-    // this.getDataforTable()     // this is not working due to problem in query inside store
+    // this.getDataforTable()     // this is not working due to problem in query inside store with graphql not accessing query
     console.log('mounted')
     this.testData()
   },
@@ -65,17 +99,59 @@ export default {
         })
         .then(({ data }) => {
           this.users = data.allUsers
+          this.oldUsers = data.allUsers
           console.log('data', this.users)
         })
         .catch((error) => {
           console.log(error)
         })
     },
+    sortByid() {
+      // clicking on id column will change sorted value to 1 or 2
+      // 1 - sorted ascending
+      // 2 - sorted descending
+      if (this.sorted === 1) {
+        this.sorted = 2
+        console.log('sorted', this.sorted)
+      } else if (this.sorted === 2) {
+        this.sorted = 1
+        console.log('sorted', this.sorted)
+      }
+    },
+  },
+  watch: {
+    // we watch the value of sorted and if it is 1 or 2 we will sort the array and we will update the table data with the new array
+    // I know that we are mutating the original array but for the sake of simplicity there is no need to over complicate things because
+    // there is only two options in the task asc/desc, if there was more options I would not mutate the original array
+    // I would have 0 1 2 statuses and then we would sort the array based on the status
+    // 0 status would be the unsorted case  ...this.users
+    // or I can just save the original value in a bystandard array
+    sorted() {
+      if (this.sorted === 1) {
+        this.manipulatedArray = this.users.sort((a, b) => a.id - b.id)
+        this.users = this.manipulatedArray
+        this.sortStatus = 'asc'
+      } else if (this.sorted === 2) {
+        this.manipulatedArray = this.users.sort((a, b) => b.id - a.id)
+        this.users = this.manipulatedArray
+        this.sortStatus = 'desc'
+      }
+    },
   },
 }
 </script>
 
 <style scoped lang="scss">
+.sortStatus {
+  position: absolute;
+  top: 32%;
+  left: 34.5%;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #000;
+  background-color: #fff;
+  padding: 0.5rem;
+}
 .tContainer {
   // center the table in middle of screen
   position: absolute;
@@ -84,21 +160,40 @@ export default {
   transform: translate(-50%, -50%);
   width: fit-content;
   border-collapse: collapse;
-  border: 1px solid black;
+  border-radius: 2px;
+  border-style: hidden;
+  box-shadow: 0 0 0 1px #666;
 
   .theadContainer {
-    border: 1px solid black;
+    background: #f3f4f6;
+    .theadRow {
+      .asc {
+        &.asc:hover {
+          cursor: pointer;
+        }
+        &.asc::after {
+          display: inline-block;
+          content: '▼';
+        }
+      }
+      .desc {
+        &.desc:hover {
+          cursor: pointer;
+        }
+        &.desc::after {
+          display: inline-block;
+          content: '▲';
+        }
+      }
+    }
 
     tr {
       text-align: left;
       padding: 10px 5px;
 
-      border: 1px solid black;
       th {
-        // margin: 5px 5px;
         padding: 5px 5px;
-        border: 1px solid black;
-        // make text bold
+
         font-weight: bold;
       }
     }
@@ -107,12 +202,10 @@ export default {
   .tbodyContainer {
     border: 1px solid black;
     tr {
-      padding: 10px 5px;
-      border: 1px solid black;
+      border: 0.5px solid black;
       td {
-        // margin: 5px 5px;
         padding: 5px 5px;
-        border: 1px solid black;
+        // border: 1px solid black;
         width: fit-content;
         padding-left: 5px;
         padding-right: 10px;
