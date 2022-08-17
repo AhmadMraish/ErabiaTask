@@ -2,12 +2,29 @@
   <div>
     <p class="sortStatus">{{ this.sortStatus }}</p>
     <div class="tWrapper">
-      <input
-        @input="onSearch"
-        type="text"
-        class="tSearch"
-        placeholder="Search the table"
-      />
+      <div class="searchWrapper">
+        <div class="searchWrapper-left">
+          <input
+            @input="onSearch"
+            type="text"
+            class="tSearch"
+            placeholder="Type anything to search"
+          />
+        </div>
+        <div class="searchWrapper-right">
+          <select v-model="selected" class="searchOptions">
+            <option
+              v-for="option in options"
+              :key="option.id"
+              :value="option.value"
+              :disabled="option.value === 'z'"
+            >
+              {{ option.text }}
+            </option>
+          </select>
+        </div>
+        <button>Reset</button>
+      </div>
 
       <table class="tContainer">
         <thead class="theadContainer">
@@ -60,6 +77,15 @@ export default {
     sorted: 1,
     sortStatus: 'null',
     default: true, // default class for asc desc which has no icon
+
+    // ---------- search ----------
+    selected: 'z',
+
+    options: [
+      { text: 'Search options', value: 'z' },
+      { text: 'Search by Name', value: 'B' },
+      { text: 'Search by Email', value: 'C' },
+    ],
   }),
   computed: {
     ...mapGetters(['getterTableData']),
@@ -132,11 +158,40 @@ export default {
     },
 
     onSearch(e) {
-      // search the table using search input by name
-      this.users = this.oldUsers.filter((user) => {
-        return user.name.toLowerCase().includes(e.target.value.toLowerCase())
-      })
+      // create a switch case for each option in the select
+      // if the option is B - search by name
+      // if the option is C - search by email
+      switch (this.selected) {
+        case 'B':
+          this.users = this.oldUsers.filter((user) => {
+            return user.name
+              .toLowerCase()
+              .includes(e.target.value.toLowerCase())
+          })
+          break
+        case 'C':
+          this.users = this.oldUsers.filter((user) => {
+            return user.email
+              .toLowerCase()
+              .includes(e.target.value.toLowerCase())
+          })
+          break
+        default:
+          this.users = this.oldUsers.filter((user) => {
+            return user.name
+              .toLowerCase()
+              .includes(e.target.value.toLowerCase())
+          })
+          break
+      }
     },
+
+    //  onSearch(e) {
+    //   // search the table using search input by name
+    //   this.users = this.oldUsers.filter((user) => {
+    //     return user.name.toLowerCase().includes(e.target.value.toLowerCase())
+    //   })
+    // },
   },
   watch: {
     // we watch the value of sorted and if it is 1 or 2 we will sort the array and we will update the table data with the new array
@@ -179,13 +234,41 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  .tSearch {
-    width: 250px;
-    margin-bottom: 5px;
-    border: none;
-    // remove active border from search input
-    &:focus {
-      outline: none;
+
+  .searchWrapper {
+    display: flex;
+    justify-content: space-between;
+    .searchWrapper-left {
+      .tSearch {
+        width: 100%;
+        height: 2rem;
+        padding: 0.5rem;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #000;
+        background-color: #fff;
+        margin-bottom: 5px;
+        border: none;
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+    .searchWrapper-right {
+      .searchOptions {
+        width: 100%;
+        // height: 2rem;
+        padding: 0.5rem;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #666;
+        background-color: #fff;
+        margin-bottom: 5px;
+        border: none;
+        &:focus {
+          outline: none;
+        }
+      }
     }
   }
   .tContainer {
