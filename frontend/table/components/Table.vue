@@ -23,7 +23,7 @@
             </option>
           </select>
         </div>
-        <button>Reset</button>
+        <button @click="reset" class="reset-btn">Reset</button>
       </div>
 
       <table class="tContainer">
@@ -186,6 +186,13 @@ export default {
       }
     },
 
+    reset() {
+      this.users = this.oldUsers
+      this.sortStatus = 'null'
+      this.default = true
+      this.selected = 'z'
+    },
+
     //  onSearch(e) {
     //   // search the table using search input by name
     //   this.users = this.oldUsers.filter((user) => {
@@ -238,26 +245,9 @@ export default {
   .searchWrapper {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     .searchWrapper-left {
       .tSearch {
-        width: 100%;
-        height: 2rem;
-        padding: 0.5rem;
-        font-size: 1.2rem;
-        font-weight: bold;
-        color: #000;
-        background-color: #fff;
-        margin-bottom: 5px;
-        border: none;
-        &:focus {
-          outline: none;
-        }
-      }
-    }
-    .searchWrapper-right {
-      .searchOptions {
-        width: 100%;
-        // height: 2rem;
         padding: 0.5rem;
         font-size: 1.2rem;
         font-weight: bold;
@@ -268,6 +258,30 @@ export default {
         &:focus {
           outline: none;
         }
+      }
+    }
+    .searchWrapper-right {
+      .searchOptions {
+        padding: 0.5rem;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #666;
+        background-color: #fff;
+        margin-bottom: 5px;
+        border: none;
+        &:focus {
+          outline: none;
+        }
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .reset-btn {
+      color: #666;
+
+      &:hover {
+        cursor: pointer;
       }
     }
   }
